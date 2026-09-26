@@ -162,9 +162,14 @@ checkpoints/
 
 > These values are **not directly comparable** to our results — different architectures, pretraining, number of seeds (WILDS requires 10; this study uses 1 seed), and protocols.
 
+> These values are **not directly comparable** to our results — different architectures, pretraining, number of seeds (WILDS requires 10; this study uses 1 seed), and protocols.
+
 | Method | Architecture | Published Test Accuracy |
 |--------|-------------|------------------------|
+|--------|-------------|------------------------|
 | ContriMix | DenseNet121 | 94.6% |
+| MBDG | DenseNet121 | 93.3% |
+| SGD Freeze-Embed (CLIP ViT-L) | CLIP ViT-L | 96.5% |
 | MBDG | DenseNet121 | 93.3% |
 | SGD Freeze-Embed (CLIP ViT-L) | CLIP ViT-L | 96.5% |
 
@@ -173,6 +178,8 @@ Our best result (GroupDRO, ResNet18, single seed): **94.21%**
 ---
 
 ## Limitations
+
+1. **Single seed (42):** Statistical significance cannot be claimed.
 
 1. **Single seed (42):** Statistical significance cannot be claimed.
 2. **Approximate RDP accounting:** Not a formally certified privacy proof.
