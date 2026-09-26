@@ -1,0 +1,1095 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Camelyon17 Research Demonstration Platform</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="app-layout">
+        <!-- FIXED LEFT SIDEBAR -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-brand-tag">PATHOLOGY ANALYSIS</div>
+                <h1 class="sidebar-title">Camelyon17 Research Platform</h1>
+                <p class="sidebar-subtitle">Federated Learning Research Environment</p>
+            </div>
+
+            <nav class="sidebar-nav">
+                <div class="nav-group-label">OVERVIEW</div>
+                <a href="#analysis" class="nav-item active" data-view="view-analysis">
+                    <span class="nav-icon">📊</span> Analysis
+                </a>
+                <a href="#history" class="nav-item" data-view="view-history">
+                    <span class="nav-icon">📜</span> Analysis History
+                </a>
+
+                <div class="nav-group-label">MODELS</div>
+                <a href="#model-comparison" class="nav-item" data-view="view-model-comparison">
+                    <span class="nav-icon">⚖️</span> Model Comparison
+                </a>
+                <a href="#model-performance" class="nav-item" data-view="view-model-performance">
+                    <span class="nav-icon">📈</span> Model Performance
+                </a>
+
+                <div class="nav-group-label">RESEARCH</div>
+                <a href="#research-overview" class="nav-item" data-view="view-research-overview">
+                    <span class="nav-icon">📑</span> Research Overview
+                </a>
+                <a href="#methodology" class="nav-item" data-view="view-methodology">
+                    <span class="nav-icon">🧬</span> Methodology
+                </a>
+                <a href="#dataset" class="nav-item" data-view="view-dataset">
+                    <span class="nav-icon">🗃️</span> Dataset
+                </a>
+                <a href="#generalization" class="nav-item" data-view="view-generalization">
+                    <span class="nav-icon">🌐</span> Generalization
+                </a>
+                <a href="#privacy-analysis" class="nav-item" data-view="view-privacy-analysis">
+                    <span class="nav-icon">🔒</span> Privacy Analysis
+                </a>
+                <a href="#computational-analysis" class="nav-item" data-view="view-computational-analysis">
+                    <span class="nav-icon">⏱️</span> Computational Analysis
+                </a>
+                <a href="#literature-context" class="nav-item" data-view="view-literature-context">
+                    <span class="nav-icon">📚</span> Literature Context
+                </a>
+                <a href="#limitations" class="nav-item" data-view="view-limitations">
+                    <span class="nav-icon">⚠️</span> Limitations
+                </a>
+
+                <div class="nav-group-label">SYSTEM</div>
+                <a href="#configuration" class="nav-item" data-view="view-configuration">
+                    <span class="nav-icon">⚙️</span> Configuration
+                </a>
+                <a href="#about" class="nav-item" data-view="view-about">
+                    <span class="nav-icon">ℹ️</span> About
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="status-indicator">
+                    <span class="status-dot online"></span>
+                    <span>Inference service ready</span>
+                </div>
+                <div class="version-text">Research Prototype · v1.0</div>
+            </div>
+        </aside>
+
+        <!-- MAIN CONTENT AREA -->
+        <main class="main-wrapper">
+            <!-- TOP HEADER -->
+            <header class="top-header">
+                <div class="header-left">
+                    <h2 id="header-page-title" class="page-title">Image Analysis</h2>
+                    <p id="header-page-sub" class="page-subtitle">Camelyon17 histopathology classification</p>
+                </div>
+                <div class="header-right">
+                    <div class="service-badge">
+                        <span class="status-dot online"></span> Model service ready
+                    </div>
+                </div>
+            </header>
+
+            <!-- CONTAINER FOR VIEWS -->
+            <div class="content-body">
+
+                <!-- 1. IMAGE ANALYSIS VIEW (DEFAULT) -->
+                <section id="view-analysis" class="view-panel active">
+                    <div class="analysis-grid">
+                        <!-- LEFT: UPLOAD PANEL -->
+                        <div class="card upload-card">
+                            <div class="card-header">
+                                <h3 class="card-title">Input Image</h3>
+                                <p class="card-subtitle">Upload a Camelyon17-style histopathology patch.</p>
+                            </div>
+                            <div class="card-body">
+                                <div class="upload-area" id="drop-zone">
+                                    <input type="file" id="file-input" accept="image/png, image/jpeg, image/jpg, image/webp" hidden>
+                                    <div class="upload-icon">📁</div>
+                                    <div class="upload-text-primary">Upload pathology image</div>
+                                    <div class="upload-text-secondary">Drag and drop an image here</div>
+                                    <div class="upload-divider"><span>or</span></div>
+                                    <button class="btn btn-outline" id="btn-browse" type="button">Browse files</button>
+                                    <div class="upload-hint">Supported: PNG · JPG · JPEG · WEBP</div>
+                                    <div class="upload-hint highlight">Recommended: 96 × 96 pixels</div>
+                                </div>
+
+                                <!-- PREVIEW CONTAINER -->
+                                <div class="preview-container hidden" id="preview-container">
+                                    <div class="preview-box">
+                                        <img id="image-preview" src="" alt="Pathology image preview">
+                                    </div>
+                                    <div class="preview-meta">
+                                        <div class="meta-row"><span class="meta-label">Filename:</span> <span id="meta-filename" class="meta-val">-</span></div>
+                                        <div class="meta-row"><span class="meta-label">Original dimensions:</span> <span id="meta-dims" class="meta-val">-</span></div>
+                                        <div class="meta-row"><span class="meta-label">File size:</span> <span id="meta-size" class="meta-val">-</span></div>
+                                        <div class="resize-notice hidden" id="resize-notice">
+                                            ℹ️ Image will be resized to 96 × 96 for inference.
+                                        </div>
+                                    </div>
+                                    <button class="btn btn-danger-link" id="btn-remove-image" type="button">Remove image</button>
+                                </div>
+
+                                <!-- MODEL SELECTION MODE -->
+                                <div class="form-group margin-top-md">
+                                    <label class="form-label" for="inference-mode">Inference mode:</label>
+                                    <select id="inference-mode" class="form-select">
+                                        <option value="all" selected>[ Compare all available models ]</option>
+                                        <option value="single">[ Single model ]</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group hidden" id="single-model-group">
+                                    <label class="form-label" for="single-model-select">Select model:</label>
+                                    <select id="single-model-select" class="form-select">
+                                        <option value="GroupDRO">GroupDRO (Best Research Model)</option>
+                                        <option value="ERM">ERM (Centralized Baseline)</option>
+                                        <option value="FedProx">FedProx (Proximal FL)</option>
+                                        <option value="DP-WHFedDG">DP-WHFedDG (Privacy + DG)</option>
+                                        <option value="FedAvg">FedAvg (Baseline FL)</option>
+                                    </select>
+                                </div>
+
+                                <button class="btn btn-primary btn-full margin-top-md" id="btn-analyze" disabled>
+                                    Analyze Image
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- RIGHT: MODEL & INFERENCE INFO / RESULTS -->
+                        <div class="results-container">
+                            <div id="results-placeholder" class="card placeholder-card">
+                                <div class="placeholder-icon">🔬</div>
+                                <h4>No Image Analyzed Yet</h4>
+                                <p>Upload a histopathology patch image on the left and click <strong>Analyze Image</strong> to run inference across all available models.</p>
+                            </div>
+
+                            <div id="loading-state" class="card loading-card hidden">
+                                <div class="spinner"></div>
+                                <p class="loading-text">Analyzing image...</p>
+                            </div>
+
+                            <!-- RESULTS DISPLAY CONTAINER -->
+                            <div id="results-content" class="hidden">
+                                <div class="section-title-bar">
+                                    <h3>Classification Comparison</h3>
+                                    <span class="badge badge-neutral">Unseen Hospital 4 Protocol</span>
+                                </div>
+
+                                <!-- CARDS GRID -->
+                                <div class="model-cards-grid" id="model-cards-container">
+                                    <!-- Cards populated dynamically by app.js -->
+                                </div>
+
+                                <!-- BEST MODEL RESULT SUMMARY BOX -->
+                                <div class="card summary-card margin-top-md">
+                                    <div class="summary-header">
+                                        <div>
+                                            <div class="summary-label">CURRENT BEST RESEARCH MODEL</div>
+                                            <div class="summary-model-name">GroupDRO</div>
+                                        </div>
+                                        <span class="badge badge-success">BEST ON FINAL EVALUATION</span>
+                                    </div>
+                                    <div class="summary-stats-grid">
+                                        <div class="stat-box">
+                                            <div class="stat-value">93.8528%</div>
+                                            <div class="stat-label">Balanced Accuracy</div>
+                                        </div>
+                                        <div class="stat-box">
+                                            <div class="stat-value">93.4232%</div>
+                                            <div class="stat-label">F1 Score</div>
+                                        </div>
+                                        <div class="stat-box">
+                                            <div class="stat-value">98.4044%</div>
+                                            <div class="stat-label">AUROC</div>
+                                        </div>
+                                        <div class="stat-box">
+                                            <div class="stat-value">Hospital 4</div>
+                                            <div class="stat-label">Evaluation Domain</div>
+                                        </div>
+                                        <div class="stat-box">
+                                            <div class="stat-value">80,974</div>
+                                            <div class="stat-label">Test Samples</div>
+                                        </div>
+                                        <div class="stat-box">
+                                            <div class="stat-value">9</div>
+                                            <div class="stat-label">Patients</div>
+                                        </div>
+                                    </div>
+                                    <p class="summary-note">Best model according to the final unseen-hospital evaluation.</p>
+                                </div>
+
+                                <!-- METRIC HIGHLIGHTS -->
+                                <div class="card margin-top-md">
+                                    <div class="card-header">
+                                        <h4 class="card-title">Metric Highlights</h4>
+                                        <p class="card-subtitle">Summary of best-performing models across individual evaluation metrics.</p>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="highlights-grid">
+                                            <div class="highlight-item">
+                                                <div class="hl-metric">Highest Accuracy</div>
+                                                <div class="hl-model">GroupDRO</div>
+                                                <div class="hl-value">94.2130%</div>
+                                            </div>
+                                            <div class="highlight-item">
+                                                <div class="hl-metric">Highest Balanced Accuracy</div>
+                                                <div class="hl-model">GroupDRO</div>
+                                                <div class="hl-value">93.8528%</div>
+                                            </div>
+                                            <div class="highlight-item">
+                                                <div class="hl-metric">Highest Precision</div>
+                                                <div class="hl-model">GroupDRO</div>
+                                                <div class="hl-value">97.8854%</div>
+                                            </div>
+                                            <div class="highlight-item">
+                                                <div class="hl-metric">Highest Recall</div>
+                                                <div class="hl-model">FedAvg</div>
+                                                <div class="hl-value">97.6993%</div>
+                                            </div>
+                                            <div class="highlight-item">
+                                                <div class="hl-metric">Highest F1</div>
+                                                <div class="hl-model">GroupDRO</div>
+                                                <div class="hl-value">93.4232%</div>
+                                            </div>
+                                            <div class="highlight-item">
+                                                <div class="hl-metric">Highest AUROC</div>
+                                                <div class="hl-model">GroupDRO</div>
+                                                <div class="hl-value">98.4044%</div>
+                                            </div>
+                                            <div class="highlight-item">
+                                                <div class="hl-metric">Lowest False Positive Rate</div>
+                                                <div class="hl-model">GroupDRO</div>
+                                                <div class="hl-value">1.6444%</div>
+                                            </div>
+                                            <div class="highlight-item">
+                                                <div class="hl-metric">Lowest False Negative Rate</div>
+                                                <div class="hl-model">FedAvg</div>
+                                                <div class="hl-value">2.3007%</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 2. ANALYSIS HISTORY VIEW -->
+                <section id="view-history" class="view-panel">
+                    <div class="card">
+                        <div class="card-header flex-between">
+                            <div>
+                                <h3 class="card-title">Analysis History</h3>
+                                <p class="card-subtitle">Local browser-session history of inferences conducted during this session.</p>
+                            </div>
+                            <button class="btn btn-outline btn-sm" id="btn-clear-history">Clear Session History</button>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="data-table" id="table-history">
+                                    <thead>
+                                        <tr>
+                                            <th>Time</th>
+                                            <th>Image</th>
+                                            <th>Model</th>
+                                            <th>Prediction</th>
+                                            <th>Confidence</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="history-tbody">
+                                        <tr>
+                                            <td colspan="5" class="text-center text-muted">No history recorded in this session yet.</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="notice-box margin-top-md">
+                                🔒 <strong>Privacy Assurance:</strong> Uploaded images are processed strictly in server memory for inference and are not permanently stored on disk.
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 3. MODEL COMPARISON VIEW -->
+                <section id="view-model-comparison" class="view-panel">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Model Architecture & Paradigm Comparison</h3>
+                            <p class="card-subtitle">Comparison of training strategies, privacy guarantees, and target optimization objectives.</p>
+                        </div>
+                        <div class="card-body">
+                            <div class="model-cards-flex" id="model-comparison-list">
+                                <!-- Dynamic model cards loaded here -->
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 4. MODEL PERFORMANCE VIEW -->
+                <section id="view-model-performance" class="view-panel">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Model Performance</h3>
+                            <p class="card-subtitle">Final evaluation metrics on the unseen hospital node.</p>
+                            <div class="meta-strip margin-top-sm">
+                                <span><strong>Evaluation domain:</strong> Hospital 4</span> ·
+                                <span><strong>Test samples:</strong> 80,974</span> ·
+                                <span><strong>Patients:</strong> 9</span>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="data-table highlight-winners-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Method</th>
+                                            <th>Accuracy (%)</th>
+                                            <th>Balanced Accuracy (%)</th>
+                                            <th>Precision (%)</th>
+                                            <th>Recall (%)</th>
+                                            <th>F1 (%)</th>
+                                            <th>AUROC (%)</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td><strong>ERM</strong></td>
+                                            <td>93.8239</td>
+                                            <td>93.5368</td>
+                                            <td>96.3867</td>
+                                            <td>89.9460</td>
+                                            <td>93.0550</td>
+                                            <td>98.1697</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>FedAvg</strong></td>
+                                            <td>73.2210</td>
+                                            <td>75.0337</td>
+                                            <td>63.6013</td>
+                                            <td class="table-winner">97.6993</td>
+                                            <td>77.0462</td>
+                                            <td>93.0683</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>FedProx</strong></td>
+                                            <td>93.0756</td>
+                                            <td>92.9275</td>
+                                            <td>93.6948</td>
+                                            <td>91.0763</td>
+                                            <td>92.3670</td>
+                                            <td>97.6420</td>
+                                        </tr>
+                                        <tr class="row-highlight">
+                                            <td><strong>GroupDRO</strong> <span class="badge badge-success badge-sm">Best Overall</span></td>
+                                            <td class="table-winner">94.2130</td>
+                                            <td class="table-winner">93.8528</td>
+                                            <td class="table-winner">97.8854</td>
+                                            <td>89.3500</td>
+                                            <td class="table-winner">93.4232</td>
+                                            <td class="table-winner">98.4044</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>DP-WHFedDG</strong> <span class="badge badge-primary badge-sm">Best Stability</span></td>
+                                            <td>80.0319</td>
+                                            <td>80.7971</td>
+                                            <td>72.7941</td>
+                                            <td>90.3648</td>
+                                            <td>80.6334</td>
+                                            <td>91.9413</td>
+                                        </tr>
+                                        <tr class="text-muted">
+                                            <td><strong>DP-FedAvg</strong> <span class="badge badge-neutral badge-sm">Coming Soon</span></td>
+                                            <td>N/A</td>
+                                            <td>N/A</td>
+                                            <td>N/A</td>
+                                            <td>N/A</td>
+                                            <td>N/A</td>
+                                            <td>N/A</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ERROR ANALYSIS & CONFUSION MATRICES -->
+                    <div class="card margin-top-md">
+                        <div class="card-header">
+                            <h3 class="card-title">Error Analysis & Confusion Matrices</h3>
+                            <p class="card-subtitle">Detailed breakdown of true positives, false positives, true negatives, and false negatives on Hospital 4 test data.</p>
+                        </div>
+                        <div class="card-body">
+                            <div class="confusion-grid">
+                                <div class="cm-card">
+                                    <div class="cm-title">ERM</div>
+                                    <div class="cm-matrix">
+                                        <div class="cm-cell tn">TN: 42,469</div>
+                                        <div class="cm-cell fp">FP: 1,256</div>
+                                        <div class="cm-cell fn">FN: 3,745</div>
+                                        <div class="cm-cell tp">TP: 33,504</div>
+                                    </div>
+                                    <div class="cm-metrics">
+                                        <div>Specificity: 97.13%</div>
+                                        <div>FPR: 2.87%</div>
+                                    </div>
+                                </div>
+
+                                <div class="cm-card">
+                                    <div class="cm-title">FedAvg</div>
+                                    <div class="cm-matrix">
+                                        <div class="cm-cell tn">TN: 22,898</div>
+                                        <div class="cm-cell fp alert">FP: 20,827</div>
+                                        <div class="cm-cell fn">FN: 857</div>
+                                        <div class="cm-cell tp">TP: 36,392</div>
+                                    </div>
+                                    <div class="cm-metrics">
+                                        <div>Sensitivity: 97.70%</div>
+                                        <div>FPR: 47.63%</div>
+                                        <div>FNR: 2.30%</div>
+                                    </div>
+                                </div>
+
+                                <div class="cm-card">
+                                    <div class="cm-title">FedProx</div>
+                                    <div class="cm-matrix">
+                                        <div class="cm-cell tn">TN: 41,442</div>
+                                        <div class="cm-cell fp">FP: 2,283</div>
+                                        <div class="cm-cell fn">FN: 3,324</div>
+                                        <div class="cm-cell tp">TP: 33,925</div>
+                                    </div>
+                                    <div class="cm-metrics">
+                                        <div>Specificity: 94.78%</div>
+                                        <div>FPR: 5.22%</div>
+                                    </div>
+                                </div>
+
+                                <div class="cm-card highlighted">
+                                    <div class="cm-title">GroupDRO <span class="badge badge-success badge-sm">Best Specificity</span></div>
+                                    <div class="cm-matrix">
+                                        <div class="cm-cell tn">TN: 43,006</div>
+                                        <div class="cm-cell fp success">FP: 719</div>
+                                        <div class="cm-cell fn">FN: 3,967</div>
+                                        <div class="cm-cell tp">TP: 33,282</div>
+                                    </div>
+                                    <div class="cm-metrics">
+                                        <div>Specificity: 98.36%</div>
+                                        <div>FPR: 1.64%</div>
+                                        <div>FNR: 10.65%</div>
+                                    </div>
+                                </div>
+
+                                <div class="cm-card">
+                                    <div class="cm-title">DP-WHFedDG</div>
+                                    <div class="cm-matrix">
+                                        <div class="cm-cell tn">TN: 31,145</div>
+                                        <div class="cm-cell fp">FP: 12,580</div>
+                                        <div class="cm-cell fn">FN: 3,589</div>
+                                        <div class="cm-cell tp">TP: 33,660</div>
+                                    </div>
+                                    <div class="cm-metrics">
+                                        <div>Specificity: 71.23%</div>
+                                        <div>FPR: 28.77%</div>
+                                        <div>FNR: 9.64%</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="callout callout-info margin-top-md">
+                                💡 <strong>Error Analysis Insight:</strong> FedAvg detects more anomalous samples (high sensitivity 97.70%), but produces a very high rate of false positives (FPR 47.63%). Conversely, GroupDRO produces substantially better specificity (98.36%) and minimal false positives (719). Neither model is universally superior for all clinical trade-offs without tuning decision thresholds.
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 5. RESEARCH OVERVIEW PAGE -->
+                <section id="view-research-overview" class="view-panel">
+                    <div class="card hero-banner-card">
+                        <h2 class="hero-title">Domain-Generalized Federated Learning for Robust Privacy-Preserving Medical Diagnosis Across Hospitals</h2>
+                        <p class="hero-desc">An experimental framework for evaluating federated medical image classification under cross-hospital domain shift.</p>
+
+                        <div class="hero-cards-grid">
+                            <div class="hero-card">
+                                <div class="hero-card-title">FEDERATED LEARNING</div>
+                                <p class="hero-card-body">Collaborative training across hospitals 0, 1, and 2 without centralizing raw images.</p>
+                            </div>
+                            <div class="hero-card">
+                                <div class="hero-card-title">PRIVACY</div>
+                                <p class="hero-card-body">Differentially private local optimization in DP-WHFedDG with gradient clipping and noise.</p>
+                            </div>
+                            <div class="hero-card">
+                                <div class="hero-card-title">DOMAIN GENERALIZATION</div>
+                                <p class="hero-card-body">Evaluation on completely unseen hospital 4 node (80,974 patches, 9 patients).</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- WHAT THIS RESEARCH ACHIEVED (01-08) -->
+                    <div class="card margin-top-md">
+                        <div class="card-header">
+                            <h3 class="card-title">What This Research Achieved</h3>
+                            <p class="card-subtitle">Key methodological milestones and empirical findings.</p>
+                        </div>
+                        <div class="card-body">
+                            <div class="achievements-list">
+
+                                <div class="achieve-item">
+                                    <div class="achieve-num">01</div>
+                                    <div class="achieve-content">
+                                        <h4>UNSEEN-HOSPITAL EVALUATION</h4>
+                                        <p>The experiment does not evaluate only on the same domains used for training. Training uses Hospitals 0, 1, and 2; validation uses Hospital 3; and the final test set is strictly Hospital 4 (80,974 test samples, 9 patients). This provides a rigorous test of cross-hospital generalization.</p>
+                                    </div>
+                                </div>
+
+                                <div class="achieve-item">
+                                    <div class="achieve-num">02</div>
+                                    <div class="achieve-content">
+                                        <h4>PATIENT-LEVEL LEAKAGE CONTROL</h4>
+                                        <p>Patient overlap was explicitly audited and eliminated. The final test set excludes patients 17, 20, 46, and 86. Final validation/test patient overlap is 0, and training/test patient overlap is 0. Patient-level separation prevents patch correlation leakage from artificially inflating test metrics.</p>
+                                    </div>
+                                </div>
+
+                                <div class="achieve-item">
+                                    <div class="achieve-num">03</div>
+                                    <div class="achieve-content">
+                                        <h4>PRIVACY-ORIENTED FEDERATED LEARNING</h4>
+                                        <p>DP-WHFedDG incorporates per-sample gradient processing, gradient clipping (norm = 1.0), and Gaussian noise addition (multiplier = 0.8) across 5 federated rounds. <em>Note: Privacy accounting is an approximate analytical RDP estimate and not a certified end-to-end guarantee.</em></p>
+                                    </div>
+                                </div>
+
+                                <div class="achieve-item">
+                                    <div class="achieve-num">04</div>
+                                    <div class="achieve-content">
+                                        <h4>MULTIPLE FEDERATED BASELINES</h4>
+                                        <p>Evaluates standard FedAvg (federated averaging), FedProx (proximal drift penalty), GroupDRO (worst-domain risk optimization), and DP-WHFedDG, compared alongside centralized ERM.</p>
+                                    </div>
+                                </div>
+
+                                <div class="achieve-item">
+                                    <div class="achieve-num">05</div>
+                                    <div class="achieve-content">
+                                        <h4>DOMAIN STABILITY ANALYSIS</h4>
+                                        <p>DP-WHFedDG produced the smallest mean absolute validation-to-test performance gap (4.766 pp), demonstrating robust domain stability, though GroupDRO retains higher absolute accuracy.</p>
+                                    </div>
+                                </div>
+
+                                <div class="achieve-item">
+                                    <div class="achieve-num">06</div>
+                                    <div class="achieve-content">
+                                        <h4>RESEARCH-LEVEL ERROR ANALYSIS</h4>
+                                        <p>Beyond global accuracy, the study examines precision, recall, F1, AUROC, specificity, FPR, FNR, and complete confusion matrices to characterize model risk profiles.</p>
+                                    </div>
+                                </div>
+
+                                <div class="achieve-item">
+                                    <div class="achieve-num">07</div>
+                                    <div class="achieve-content">
+                                        <h4>COMPUTATIONAL COST ANALYSIS</h4>
+                                        <p>Recorded federated round execution times show DP-WHFedDG requires 1,310.38 seconds per round compared to FedAvg's 279.94 seconds due to per-sample gradient ops.</p>
+                                    </div>
+                                </div>
+
+                                <div class="achieve-item">
+                                    <div class="achieve-num">08</div>
+                                    <div class="achieve-content">
+                                        <h4>HONEST NEGATIVE RESULT</h4>
+                                        <p>DP-FedAvg was attempted but suffered training instability (exploding loss gradients). Invalid results were discarded and the slot is kept reserved for future extension.</p>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- RESEARCH TAKEAWAYS -->
+                    <div class="card margin-top-md">
+                        <div class="card-header">
+                            <h3 class="card-title">Research Takeaways</h3>
+                        </div>
+                        <div class="card-body">
+                            <blockquote class="research-quote">
+                                "GroupDRO achieved the strongest absolute predictive performance in the completed experiments, while DP-WHFedDG showed the smallest observed validation-to-unseen-test performance gap. These results suggest a trade-off between predictive performance, privacy-oriented optimization, domain stability, and computational cost."
+                            </blockquote>
+                            <p class="margin-top-sm text-secondary">
+                                DP-WHFedDG should therefore not be presented as the highest-performing model in this experiment. Its main observed strength is comparatively stable validation-to-unseen-test behavior under the evaluated protocol. DP-FedAvg remains a planned extension for isolating the incremental effect of differential privacy relative to standard FedAvg.
+                            </p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 6. METHODOLOGY PAGE -->
+                <section id="view-methodology" class="view-panel">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Core Research Concepts & Diagrams</h3>
+                            <p class="card-subtitle">Methodological pillars of the experimental framework.</p>
+                        </div>
+                        <div class="card-body">
+
+                            <!-- WHY FEDERATED LEARNING -->
+                            <div class="diagram-block">
+                                <h4>Why Federated Learning?</h4>
+                                <div class="diagram-box">
+                                    <div class="diagram-flow">
+                                        <div class="flow-node">Hospital 0</div>
+                                        <div class="flow-node">Hospital 1</div>
+                                        <div class="flow-node">Hospital 2</div>
+                                        <div class="flow-arrow">───►</div>
+                                        <div class="flow-node highlight">Federated Training</div>
+                                        <div class="flow-arrow">───►</div>
+                                        <div class="flow-node target">Global Model</div>
+                                    </div>
+                                </div>
+                                <p class="diagram-desc">
+                                    Medical datasets are distributed across institutions due to privacy regulations and data ownership. Federated learning enables collaborative model optimization without centralizing patient images.
+                                </p>
+                            </div>
+
+                            <hr class="divider">
+
+                            <!-- WHY DIFFERENTIAL PRIVACY -->
+                            <div class="diagram-block margin-top-md">
+                                <h4>Why Differential Privacy?</h4>
+                                <div class="diagram-box">
+                                    <div class="diagram-flow vertical-mobile">
+                                        <span class="step-chip">Local Data</span> ➔
+                                        <span class="step-chip">Per-sample Gradients</span> ➔
+                                        <span class="step-chip">Gradient Clipping (1.0)</span> ➔
+                                        <span class="step-chip">Gaussian Noise (0.8)</span> ➔
+                                        <span class="step-chip">Private Update</span> ➔
+                                        <span class="step-chip highlight">Federated Aggregation</span>
+                                    </div>
+                                </div>
+                                <p class="diagram-desc">
+                                    Federated learning reduces raw data centralization, but model updates can still leak information. Differential privacy adds formal bounds by clipping per-sample gradients and injecting calibrated noise.
+                                </p>
+                            </div>
+
+                            <hr class="divider">
+
+                            <!-- WHY DOMAIN GENERALIZATION -->
+                            <div class="diagram-block margin-top-md">
+                                <h4>Why Domain Generalization?</h4>
+                                <div class="diagram-box">
+                                    <div class="diagram-split">
+                                        <div class="split-col">
+                                            <div class="split-header">TRAINING</div>
+                                            <div>Hospital 0</div>
+                                            <div>Hospital 1</div>
+                                            <div>Hospital 2</div>
+                                        </div>
+                                        <div class="split-col">
+                                            <div class="split-header">VALIDATION</div>
+                                            <div>Hospital 3</div>
+                                        </div>
+                                        <div class="split-col unseen">
+                                            <div class="split-header">UNSEEN TEST</div>
+                                            <div>Hospital 4 (Node 4)</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <p class="diagram-desc">
+                                    Pathology slide scanners, staining techniques, and hospital procedures create severe domain shifts. Evaluated test samples come strictly from Hospital 4, which is never seen during training or validation.
+                                </p>
+                            </div>
+
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 7. DATASET & EXPERIMENTAL NOTES PAGE -->
+                <section id="view-dataset" class="view-panel">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Dataset & Experimental Parameters</h3>
+                            <p class="card-subtitle">Exact configuration, patient exclusions, and patch counts for Camelyon17.</p>
+                        </div>
+                        <div class="card-body">
+                            <div class="meta-grid-2">
+                                <div class="meta-card">
+                                    <h4>Dataset Partitioning</h4>
+                                    <ul class="clean-list">
+                                        <li><strong>Total Dataset:</strong> 455,954 image patches</li>
+                                        <li><strong>Training Nodes:</strong> Hospitals 0, 1, 2</li>
+                                        <li><strong>Validation Node:</strong> Hospital 3</li>
+                                        <li><strong>Unseen Test Node:</strong> Hospital 4</li>
+                                        <li><strong>Final Test Samples:</strong> 80,974 patches</li>
+                                        <li><strong>Final Test Patients:</strong> 9 patients</li>
+                                        <li><strong>Test Label Breakdown:</strong> Normal: 43,725 | Anomalous: 37,249</li>
+                                    </ul>
+                                </div>
+
+                                <div class="meta-card">
+                                    <h4>Patient-Level Isolation</h4>
+                                    <ul class="clean-list">
+                                        <li><strong>Excluded Patients:</strong> 17, 20, 46, 86</li>
+                                        <li><strong>Train/Test Patient Overlap:</strong> 0</li>
+                                        <li><strong>Val/Test Patient Overlap:</strong> 0</li>
+                                        <li><strong>Patch Dimensions:</strong> 96 × 96 pixels</li>
+                                        <li><strong>Random Seed:</strong> 42</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="card margin-top-md border-subtle">
+                                <h4>Hyperparameter Specification</h4>
+                                <div class="stats-table-grid">
+                                    <div><span>Backbone Architecture:</span> <strong>ResNet18</strong></div>
+                                    <div><span>Loss Function:</span> <strong>Focal Loss (γ=2.0, α=0.25)</strong></div>
+                                    <div><span>Optimizer:</span> <strong>SGD</strong></div>
+                                    <div><span>Learning Rate:</span> <strong>0.001</strong></div>
+                                    <div><span>Momentum:</span> <strong>0.9</strong></div>
+                                    <div><span>Weight Decay:</span> <strong>0.0001</strong></div>
+                                    <div><span>Federated Rounds:</span> <strong>5</strong></div>
+                                    <div><span>Local Epochs:</span> <strong>1</strong></div>
+                                    <div><span>Batch Size:</span> <strong>64</strong></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 8. CROSS-HOSPITAL GENERALIZATION PAGE -->
+                <section id="view-generalization" class="view-panel">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Cross-Hospital Generalization Gap</h3>
+                            <p class="card-subtitle">Mean absolute performance drop from validation hospital (Node 3) to unseen test hospital (Node 4).</p>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="data-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Method</th>
+                                            <th>Mean Absolute Val → Test Gap</th>
+                                            <th>Stability Note</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr class="row-highlight">
+                                            <td><strong>DP-WHFedDG</strong></td>
+                                            <td><span class="badge badge-success">4.766 percentage points</span></td>
+                                            <td><strong>SMALLEST VALIDATION-TO-TEST GAP</strong></td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>ERM</strong></td>
+                                            <td>8.010 percentage points</td>
+                                            <td>Moderate stability</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>FedProx</strong></td>
+                                            <td>15.942 percentage points</td>
+                                            <td>Significant gap</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>GroupDRO</strong></td>
+                                            <td>19.066 percentage points</td>
+                                            <td>High absolute performance, larger gap</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>FedAvg</strong></td>
+                                            <td>23.468 percentage points</td>
+                                            <td>Largest domain shift gap</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <div class="callout callout-warning margin-top-md">
+                                ⚠️ <strong>Methodological Distinction:</strong> DP-WHFedDG showed the smallest validation-to-unseen-test performance gap in the completed experiments. However, <em>this does not imply the highest absolute test performance</em>. GroupDRO maintains substantially higher absolute test accuracy (94.21% vs 80.03%).
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 9. PRIVACY ANALYSIS PAGE -->
+                <section id="view-privacy-analysis" class="view-panel">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Differential Privacy Parameters & Analysis</h3>
+                            <p class="card-subtitle">Privacy specification for DP-WHFedDG.</p>
+                        </div>
+                        <div class="card-body">
+                            <div class="privacy-params-grid">
+                                <div class="param-box">
+                                    <div class="param-name">Gradient Clipping Norm</div>
+                                    <div class="param-val">1.0</div>
+                                </div>
+                                <div class="param-box">
+                                    <div class="param-name">Noise Multiplier (σ)</div>
+                                    <div class="param-val">0.8</div>
+                                </div>
+                                <div class="param-box">
+                                    <div class="param-name">Batch Size</div>
+                                    <div class="param-val">64</div>
+                                </div>
+                                <div class="param-box">
+                                    <div class="param-name">Local Epochs</div>
+                                    <div class="param-val">1</div>
+                                </div>
+                                <div class="param-box">
+                                    <div class="param-name">Federated Rounds</div>
+                                    <div class="param-val">5</div>
+                                </div>
+                                <div class="param-box">
+                                    <div class="param-name">Privacy Accounting</div>
+                                    <div class="param-val">RDP Analysis</div>
+                                </div>
+                            </div>
+
+                            <div class="callout callout-info margin-top-md">
+                                🔒 <strong>Privacy Disclaimer:</strong> The privacy accounting used in this study is an approximate analytical Renyi Differential Privacy (RDP) estimate and is not presented as a formally certified end-to-end privacy guarantee.
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 10. COMPUTATIONAL ANALYSIS PAGE -->
+                <section id="view-computational-analysis" class="view-panel">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Computational Overhead Analysis</h3>
+                            <p class="card-subtitle">Recorded federated round training execution times.</p>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="data-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Method</th>
+                                            <th>Average Round Time (s)</th>
+                                            <th>Relative Burden</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td><strong>FedAvg</strong></td>
+                                            <td>279.94 sec</td>
+                                            <td>1.0× (Baseline)</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>GroupDRO</strong></td>
+                                            <td>262.61 sec</td>
+                                            <td>0.94×</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>FedProx</strong></td>
+                                            <td>~505.50 sec</td>
+                                            <td>1.81×</td>
+                                        </tr>
+                                        <tr class="row-highlight">
+                                            <td><strong>DP-WHFedDG</strong></td>
+                                            <td>1,310.38 sec</td>
+                                            <td>4.68× (Highest Overhead)</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <p class="margin-top-sm text-secondary">
+                                DP-WHFedDG required considerably more computation per round because per-sample gradient processing and privacy noise addition steps are required for differential privacy guarantees.
+                            </p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 11. LITERATURE CONTEXT PAGE -->
+                <section id="view-literature-context" class="view-panel">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Literature Benchmark Context</h3>
+                            <p class="card-subtitle">Published Camelyon17-WILDS leaderboard entries provided for contextual reference.</p>
+                        </div>
+                        <div class="card-body">
+                            <div class="callout callout-warning">
+                                ⚠️ Published Camelyon17-WILDS benchmark results use standardized benchmark protocols, and differences in model architecture, pretraining, data usage, number of seeds, and evaluation protocol can materially affect performance. Official WILDS submissions require 10 random seeds; our experiment uses a single seed (42). These entries are provided for contextual interpretation only and are <strong>not directly comparable</strong>.
+                            </div>
+
+                            <h4 class="margin-top-md">Published WILDS Benchmark Context</h4>
+                            <div class="table-responsive">
+                                <table class="data-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Source / Method</th>
+                                            <th>Model Architecture</th>
+                                            <th>Test Accuracy (%)</th>
+                                            <th>Protocol Notes</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td><strong>ContriMix</strong></td>
+                                            <td>DenseNet121</td>
+                                            <td>94.6%</td>
+                                            <td>Standard WILDS benchmark submission</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>MBDG</strong></td>
+                                            <td>DenseNet121</td>
+                                            <td>93.3%</td>
+                                            <td>Non-standard entry due to external pretraining</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>SGD Freeze-Embed</strong></td>
+                                            <td>CLIP ViT-L</td>
+                                            <td>96.5%</td>
+                                            <td>Non-standard entry with vision-language pretraining</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <h4 class="margin-top-md">Our Experimental Results</h4>
+                            <div class="table-responsive">
+                                <table class="data-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Method</th>
+                                            <th>Model Architecture</th>
+                                            <th>Test Accuracy (%)</th>
+                                            <th>Experimental Setup</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td><strong>GroupDRO</strong></td>
+                                            <td>ResNet18</td>
+                                            <td>94.213%</td>
+                                            <td>Single seed 42, focal loss</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>ERM</strong></td>
+                                            <td>ResNet18</td>
+                                            <td>93.824%</td>
+                                            <td>Centralized baseline</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>FedProx</strong></td>
+                                            <td>ResNet18</td>
+                                            <td>93.076%</td>
+                                            <td>Proximal federated optimization</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>DP-WHFedDG</strong></td>
+                                            <td>ResNet18</td>
+                                            <td>80.032%</td>
+                                            <td>DP + worst-hospital weighting</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>FedAvg</strong></td>
+                                            <td>ResNet18</td>
+                                            <td>73.221%</td>
+                                            <td>Standard FL averaging</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 12. LIMITATIONS PAGE -->
+                <section id="view-limitations" class="view-panel">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Research Limitations</h3>
+                            <p class="card-subtitle">Transparent accounting of study bounds and open challenges.</p>
+                        </div>
+                        <div class="card-body">
+                            <ol class="limitations-list">
+                                <li>
+                                    <strong>Single primary random seed:</strong> Completed experiments use seed 42. Statistical significance claims require multi-seed trials (e.g. 10 seeds).
+                                </li>
+                                <li>
+                                    <strong>Approximate privacy accounting:</strong> RDP privacy bounds are analytical estimates rather than formally certified privacy proofs.
+                                </li>
+                                <li>
+                                    <strong>DP-FedAvg baseline incomplete:</strong> The DP-FedAvg training trial suffered numerical instability and was excluded from final quantitative analysis.
+                                </li>
+                                <li>
+                                    <strong>Controlled ablation incomplete:</strong> The current study does not isolate privacy, domain weighting, and FL optimization in strict single-factor ablations.
+                                </li>
+                                <li>
+                                    <strong>Dataset scope:</strong> Evaluation is conducted exclusively on Camelyon17 histopathology patches.
+                                </li>
+                                <li>
+                                    <strong>External validity:</strong> Additional datasets and hospital centers are required before generalizing clinical claims.
+                                </li>
+                            </ol>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 13. CONFIGURATION & SYSTEM PAGE -->
+                <section id="view-configuration" class="view-panel">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">System & Checkpoint Configuration</h3>
+                            <p class="card-subtitle">Backend status, PyTorch runtime environment, and active checkpoint paths.</p>
+                        </div>
+                        <div class="card-body">
+                            <div class="config-grid">
+                                <div class="config-item">
+                                    <span class="cfg-key">PyTorch Version:</span>
+                                    <span class="cfg-val" id="cfg-torch-ver">2.14.0+cpu</span>
+                                </div>
+                                <div class="config-item">
+                                    <span class="cfg-key">Hardware Accelerator:</span>
+                                    <span class="cfg-val" id="cfg-device">CPU</span>
+                                </div>
+                                <div class="config-item">
+                                    <span class="cfg-key">Checkpoints Path:</span>
+                                    <span class="cfg-val">checkpoints/</span>
+                                </div>
+                                <div class="config-item">
+                                    <span class="cfg-key">Active Service Status:</span>
+                                    <span class="cfg-val text-success">Online (5 Models Loaded)</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 14. ABOUT PAGE -->
+                <section id="view-about" class="view-panel">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">About This Research Platform</h3>
+                        </div>
+                        <div class="card-body">
+                            <p>
+                                This platform is a research demonstration tool built for the paper:
+                            </p>
+                            <p class="font-mono text-primary font-weight-600 margin-top-sm">
+                                "Domain-Generalized Federated Learning for Robust Privacy-Preserving Medical Diagnosis Across Hospitals"
+                            </p>
+                            <p class="margin-top-sm text-secondary">
+                                It provides an interactive interface to evaluate ResNet18 models trained under various federated learning paradigms on Camelyon17 histopathology images.
+                            </p>
+                            <div class="notice-box margin-top-md">
+                                🔬 <strong>Research Prototype Notice:</strong> This software is strictly for academic and research evaluation. It is not intended, certified, or cleared for clinical diagnostic use.
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+            </div>
+
+            <!-- MAIN FOOTER -->
+            <footer class="main-footer">
+                <div class="footer-title">Camelyon17 Research Platform</div>
+                <div class="footer-desc">Domain-Generalized Federated Learning for Robust Privacy-Preserving Medical Diagnosis Across Hospitals</div>
+                <div class="footer-disclaimer">Research prototype · Not for clinical diagnosis</div>
+            </footer>
+        </main>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,41 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.Python
+*.egg-info/
+dist/
+build/
+*.egg
+
+# Virtual Environment
+venv/
+.venv/
+env/
+
+# PyTorch checkpoints (tracked via Git LFS - see .gitattributes)
+!checkpoints/
+!checkpoints/*.pt
+
+# Model weights directory (original large .pt files)
+Models_weights/
+
+# Jupyter notebook checkpoints
+.ipynb_checkpoints/
+
+# OS artifacts
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Logs
+*.log
+
+# Temporary inference uploads
+inference_images/
