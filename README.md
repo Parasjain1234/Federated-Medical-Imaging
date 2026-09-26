@@ -209,7 +209,7 @@ Our best result (GroupDRO, ResNet18, single seed): **94.21%**
 
 ## Author
 
-**Pratham Mishra**
+**Paras Jain**
 Research project on federated domain generalization for medical imaging.
 
 ---
