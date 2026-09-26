@@ -116,7 +116,7 @@ This repository includes a full **FastAPI + PyTorch + Vanilla JS** research web 
 
 ```bash
 # Clone repo
-git clone https://github.com/pratham19092006/Federated-Medical-Imaging.git
+git clone https://github.com/Parasjain1234/Federated-Medical-Imaging.git
 cd Federated-Medical-Imaging
 
 # Install dependencies (system Python recommended)
